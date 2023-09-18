@@ -79,7 +79,9 @@ int main(int argc, char** argv) {
     const unsigned int width = 1200;
     const unsigned int height = 800;
     const int maxIterations = 256;
-    int numThreads = 20;
+
+    // change the number of threads for multithreading
+    int numThreads = 8;
 
     float x0 = -2;
     float x1 = 1;
@@ -153,7 +155,7 @@ int main(int argc, char** argv) {
     printf("Staring the slower threaded version...\n\n");
     memset(output_thread, 0, width * height * sizeof(int));
     double minThread = 1e30;
-    for (int i = 0; i < 1; ++i) {
+    for (int i = 0; i < 5; ++i) {
         double startTime = CycleTimer::currentSeconds();
         mandelbrotThread(numThreads, x0, y0, x1, y1, width, height, maxIterations, output_thread);
         printf("\n");
@@ -163,6 +165,7 @@ int main(int argc, char** argv) {
 
     printf("[mandelbrot thread]:\t\t[%.3f] ms\n", minThread * 1000);
     writePPMImage(output_thread, width, height, "mandelbrot-thread.ppm", maxIterations);
+    printf("\t\t\t\t(%.2fx speedup from %d threads)\n", minSerial/minThread, numThreads);
     printf("\n");
 
     //
@@ -171,7 +174,7 @@ int main(int argc, char** argv) {
     printf("Starting the faster threaded version...\n\n");
     memset(output_thread, 0, width * height * sizeof(int));
     minThread = 1e30;
-    for (int i = 0; i < 1; ++i) {
+    for (int i = 0; i < 5; ++i) {
         double startTime = CycleTimer::currentSeconds();
         mandelbrotThreadSpeedup(numThreads, x0, y0, x1, y1, width, height, maxIterations, output_thread);
         printf("\n");

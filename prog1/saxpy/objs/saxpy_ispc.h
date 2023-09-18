@@ -36,6 +36,7 @@ extern "C" {
     extern void saxpy_ispc_test_1(int32_t N, float scale, float * X, float * Y, float * result);
     extern void saxpy_ispc_test_2(int32_t N, float scale, float * X, float * Y, float * result);
     extern void saxpy_ispc_withtasks(int32_t N, float scale, float * X, float * Y, float * result);
+    extern void saxpy_ispc_withtasks_v2(int32_t N, float scale, float * X, float * Y, float * result);
 #if defined(__cplusplus) && (! defined(__ISPC_NO_EXTERN_C) || !__ISPC_NO_EXTERN_C )
 } /* end extern C */
 #endif // __cplusplus
