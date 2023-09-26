@@ -1,0 +1,10 @@
+#!/bin/bash
+#PBS -N mmCUBLAS-datacollection
+##PBS -l select=1:ncpus=4:mem=30gb:ngpus=1:gpu_model=v100:phase=21
+#PBS -l select=1:ncpus=4:mem=60gb:ngpus=1:gpu_model=v100
+#PBS -l walltime=00:00:10
+#PBS -j oe
+module purge
+module load courses/cpsc8200
+cd $PBS_O_WORKDIR
+./mmCUBLAS
