@@ -89,7 +89,7 @@ LIBRARIES += -lcublas
 # Target rules
 all: build
 
-build: mmCUBLAS
+build: mmCUBLAS mmOPT
 
 check.deps:
 ifeq ($(SAMPLE_ENABLED),0)
@@ -101,16 +101,19 @@ endif
 mmCUBLAS.o:mmCUBLAS.cpp
 	$(EXEC) $(NVCC) $(INCLUDES) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
 
-#mmCUBLAS.o:mmCUBLAS.cu
-#	$(EXEC) $(NVCC) $(INCLUDES) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
+mmOPT.o: mmOPT.cu
+	$(EXEC) $(NVCC) $(INCLUDES) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
 
 mmCUBLAS: mmCUBLAS.o
+	$(EXEC) $(NVCC) $(ALL_LDFLAGS) $(GENCODE_FLAGS) -o $@ $+ $(LIBRARIES)
+
+mmOPT: mmOPT.o
 	$(EXEC) $(NVCC) $(ALL_LDFLAGS) $(GENCODE_FLAGS) -o $@ $+ $(LIBRARIES)
 
 run: build
 	$(EXEC) ./mmCUBLAS
 
 clean:
-	rm -f mmCUBLAS mmCUBLAS.o
+	rm -f mmCUBLAS mmOPT *.o
 
 clobber: clean

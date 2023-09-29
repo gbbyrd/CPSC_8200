@@ -52,6 +52,12 @@
 #include <assert.h>
 #include <helper_string.h>  // helper for shared functions common to CUDA Samples
 
+// Grayson's additions
+#include <iostream>
+#include <fstream>
+using namespace std;
+#include "CycleTimer.h"
+
 // CUDA runtime
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
@@ -167,14 +173,17 @@ void initializeCUDA(int argc, char **argv, int &devID, int &iSizeMultiple, sMatr
         exit(EXIT_FAILURE);
     }
 
-
+    
     if (checkCmdLineFlag(argc, (const char **)argv, "sizemult"))
     {
         iSizeMultiple = getCmdLineArgumentInt(argc, (const char **)argv, "sizemult");
     }
 
-    iSizeMultiple = min(iSizeMultiple, 10);
-    iSizeMultiple = max(iSizeMultiple, 1);
+
+    // I commented this out because I wanted to see what would happen at larger
+    // matrix sizes
+    // iSizeMultiple = min(iSizeMultiple, 10);
+    // iSizeMultiple = max(iSizeMultiple, 1);
 
     cudaDeviceProp deviceProp;
 
@@ -315,22 +324,33 @@ int matrixMultiply(int argc, char **argv, int devID, sMatrixSize &matrix_size)
             msecPerMatrixMul,
             flopsPerMatrixMul);
 
+        // write information to the log file for performance testing
+        ofstream MyFile;
+        MyFile.open("/home/gbbyrd/CPSC_8200/proj2/mmCUBLAS_benchmark.csv", ios::app);
+        MyFile << gigaFlops << ";" << msecPerMatrixMul << ";" << flopsPerMatrixMul/1e5 <<endl;
+        MyFile.close();
+
         // copy result from device to host
         checkCudaErrors(cudaMemcpy(h_CUBLAS, d_C, mem_size_C, cudaMemcpyDeviceToHost));
 
         // Destroy the handle
         checkCudaErrors(cublasDestroy(handle));
     }
+    
 
     // compute reference solution
-    printf("Computing result using host CPU...");
+    printf("Computing result using host CPU...\n\n");
     float *reference = (float *)malloc(mem_size_C);
+    // double startTime = CycleTimer::currentSeconds();
     matrixMulCPU(reference, h_A, h_B, matrix_size.uiHA, matrix_size.uiWA, matrix_size.uiWB);
+    // double endTime = CycleTimer::currentSeconds();
+    // printf("endtime-startTime: %d - %d\n\n", endTime, startTime);
+    // printf("[cpu speed]:\t\t[%.3f] ms\n", endTime-startTime * 1000);
     printf("done.\n");
 
     // check result (CUBLAS)
     bool resCUBLAS = sdkCompareL2fe(reference, h_CUBLAS, size_C, 1.0e-6f);
-
+    printDiff(reference, h_CUBLAS, matrix_size.uiWC, matrix_size.uiHC, 100, 1.0e-5f);
     if (resCUBLAS != true)
     {
         printDiff(reference, h_CUBLAS, matrix_size.uiWC, matrix_size.uiHC, 100, 1.0e-5f);
