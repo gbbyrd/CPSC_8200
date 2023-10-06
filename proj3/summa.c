@@ -61,7 +61,15 @@ void matmul(int my_rank, int proc_grid_sz, int block_sz, double **my_A,
 						double **my_B, double **my_C){
 
 	//Add your implementation of SUMMA algorithm
-	...
+	double **buffA, **buffB;
+	buffA = alloc_2d_double(block_sz, block_sz);
+	buffB = alloc_2d_double(block_sz, block_sz);
+
+	MPI_Comm grid_comm;
+	
+	MPI_Comm row_comm;
+	MPI_Comm col_comm;
+	
 }
 
 
@@ -77,12 +85,20 @@ int main(int argc, char *argv[]) {
 
 /* insert MPI functions to 1) start process, 2) get total number of processors and 3) process rank*/
 
-	...
+	// initialize MPI
+	MPI_Init(&argc, &argv);
+
+	// get the total number of processors
+	MPI_Comm_size(MPI_COMM_WORLD, &num_proc);
+
+	// get the processor rank
+	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
 
 /* assign values to 1) proc_grid_sz and 2) block_sz*/
 	
-	...
+	proc_grid_sz = sqrt(num_proc);
+	block_sz = SZ / proc_grid_sz;
 
 	if (SZ % proc_grid_sz != 0){
 		printf("Matrix size cannot be evenly split amongst resources!\n");
@@ -101,7 +117,7 @@ int main(int argc, char *argv[]) {
 	initialize(A, B, C, block_sz);
 
 	// Use MPI_Wtime to get the starting time
-	...
+	start_time = MPI_Wtime();
 
 
 	// Use SUMMA algorithm to calculate product C
@@ -109,11 +125,11 @@ int main(int argc, char *argv[]) {
 
 
 	// Use MPI_Wtime to get the finishing time
-	...
+	end_time = MPI_Wtime();
 
 
 	// Obtain the elapsed time and assign it to total_time
-	...
+	total_time = end_time - start_time;
 
 	// Insert statements for testing
 	...
