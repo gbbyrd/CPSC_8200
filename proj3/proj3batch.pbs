@@ -1,0 +1,3 @@
+for i in {0..4}    
+    #PBS -N proj3batch
+    #PBS -l select=2:ncpus=8:mem=30gb:mpiprocs=16:ngpus=1:gpu_model=v100:interconnect=hdr,walltime=3:00:00

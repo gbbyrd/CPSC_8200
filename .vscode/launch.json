@@ -1,0 +1,62 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Build and Debug main.py",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/home/gbbyrd/prog1/mandelbrot_threads/mandelbrot",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "/home/gbbyrd/prog1/mandelbrot_threads",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description":  "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+                
+            ],
+            "preLaunchTask": "Build mandelbrot",
+        },
+        {
+            "name": "Run cartesian",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/home/gbbyrd/CPSC_8200/proj3/cartesian",
+            "cwd": "/home/gbbyrd/CPSC_8200",
+            "args": [],
+            "stopAtEntry": false,
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description":  "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+                
+            ],
+            "preLaunchTask": "Build cartesian",
+        }
+    ]
+}

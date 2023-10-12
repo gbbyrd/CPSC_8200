@@ -11,7 +11,7 @@
 
 //#define n 4
 
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 
 	int ii;
@@ -56,7 +56,7 @@ main(int argc, char *argv[])
 		{
 			b[i][j] = i + j + 2;
 		}
-/*
+
 	for ( i = 0; i < n; i++)
 	{
 		for (j = 0; j < n; j++)
@@ -64,7 +64,7 @@ main(int argc, char *argv[])
 		printf("\n");
 	}
 
-*/
+
 	/* Data distribution */ 
 
 	if( myrank != 0 ) {
